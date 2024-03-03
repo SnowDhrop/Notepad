@@ -49,7 +49,12 @@ public class NotepadGUI extends JFrame {
                 undoManager.addEdit(e.getEdit());
             }
         });
-        add(textArea, BorderLayout.CENTER);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        add(scrollPane, BorderLayout.CENTER);
+
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
 
         addKeyStrokeActions();
     }
@@ -98,7 +103,35 @@ public class NotepadGUI extends JFrame {
     }
 
     private JMenu addFormatMenu() {
-        JMenu formatMenu = new JMenu("formatMenu");
+        JMenu formatMenu = new JMenu("Format");
+
+        // Wrap word functionality
+        JCheckBoxMenuItem wordWrapMenuItem = new JCheckBoxMenuItem("Word Wrap");
+        wordWrapMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean isChecked = wordWrapMenuItem.getState();
+
+                if (isChecked) {
+                    textArea.setLineWrap(true);
+                    textArea.setWrapStyleWord(true);
+                } else {
+                    textArea.setLineWrap(false);
+                    textArea.setWrapStyleWord(false);
+                }
+            }
+        });
+        wordWrapMenuItem.setState(true);
+        formatMenu.add(wordWrapMenuItem);
+
+        // Aligning text
+        JMenu alignTextMenu = new JMenu("Align Text");
+        formatMenu.add(alignTextMenu);
+
+        // Font format
+        JMenuItem fontMenuItem = new JMenuItem("Font...");
+        formatMenu.add(fontMenuItem);
+
         return formatMenu;
     }
 
