@@ -8,6 +8,8 @@ import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.*;
 
 public class NotepadGUI extends JFrame {
@@ -17,6 +19,9 @@ public class NotepadGUI extends JFrame {
     private File currentFile;
 
     private UndoManager undoManager;
+
+    JMenuItem undoMenuItem;
+    JMenuItem redoMenuItem;
 
     public NotepadGUI() {
         super("Notepad");
@@ -45,6 +50,34 @@ public class NotepadGUI extends JFrame {
             }
         });
         add(textArea, BorderLayout.CENTER);
+
+        addKeyStrokeActions();
+    }
+
+    private void addKeyStrokeActions() {
+        // Undo keystroke
+        KeyStroke keyStrokeUndo = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
+
+        Action undoAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undoMenuItem.doClick();
+            }
+        };
+        textArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeUndo, "Undo");
+        textArea.getActionMap().put("Undo", undoAction);
+
+        // Redo keystroke
+        KeyStroke keyStrokeRedo = KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK);
+
+        Action redoAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                redoMenuItem.doClick();
+            }
+        };
+        textArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeRedo, "Redo");
+        textArea.getActionMap().put("Redo", redoAction);
     }
 
     private void addToolBar() {
@@ -58,15 +91,21 @@ public class NotepadGUI extends JFrame {
 
         // Add menus
         menuBar.add(addFileMenu());
-        menuBar.add(editMenu());
+        menuBar.add(addEditMenu());
+        menuBar.add(addFormatMenu());
 
         add(toolBar, BorderLayout.NORTH);
     }
 
-    private JMenu editMenu() {
+    private JMenu addFormatMenu() {
+        JMenu formatMenu = new JMenu("formatMenu");
+        return formatMenu;
+    }
+
+    private JMenu addEditMenu() {
         JMenu editMenu = new JMenu("Edit");
 
-        JMenuItem undoMenuItem = new JMenuItem("Undo");
+        undoMenuItem = new JMenuItem("Undo");
         undoMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +116,9 @@ public class NotepadGUI extends JFrame {
         });
         editMenu.add(undoMenuItem);
 
-        JMenuItem redoMenuItem = new JMenuItem("Redo");
+
+
+        redoMenuItem = new JMenuItem("Redo");
         redoMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,6 +128,8 @@ public class NotepadGUI extends JFrame {
             }
         });
         editMenu.add(redoMenuItem);
+
+
 
         return editMenu;
     }
