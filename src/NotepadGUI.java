@@ -150,6 +150,10 @@ public class NotepadGUI extends JFrame {
                 // If the current file is null, I have to perferm save as functionality
                 if (currentFile == null) saveAsMenuItem.doClick();
 
+                // If the user chooses to cancel saving the file this means that current file
+                // will still be null
+                if (currentFile == null) return;
+
                 try {
                     FileWriter fileWriter = new FileWriter(currentFile);
                     BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -165,6 +169,12 @@ public class NotepadGUI extends JFrame {
 
         // Exit
         JMenuItem exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NotepadGUI.this.dispose();
+            }
+        });
         fileMenu.add(exitMenuItem);
 
         return fileMenu;
