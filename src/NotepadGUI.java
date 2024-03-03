@@ -11,6 +11,7 @@ public class NotepadGUI extends JFrame {
     // File explorer
     private JFileChooser jFileChooser;
     private JTextArea textArea;
+    private File currentFile;
 
     public NotepadGUI() {
         super("Notepad");
@@ -58,6 +59,7 @@ public class NotepadGUI extends JFrame {
                 // Reset Notepad
                 setTitle("Notepad");
                 textArea.setText("");
+                currentFile = null;
             }
         });
         fileMenu.add(newMenuItem);
@@ -75,6 +77,7 @@ public class NotepadGUI extends JFrame {
                     newMenuItem.doClick();
 
                     File selectedFile = jFileChooser.getSelectedFile();
+                    currentFile = selectedFile;
                     setTitle(selectedFile.getName());
 
                     // Read the file
@@ -129,6 +132,8 @@ public class NotepadGUI extends JFrame {
                     // Update the title header of the gui to the save text file
                     setTitle(fileName);
 
+                    currentFile = selectedFile;
+
                     JOptionPane.showMessageDialog(NotepadGUI.this, "File saved !");
                 } catch(Exception exception) {
                     exception.printStackTrace();
@@ -139,6 +144,23 @@ public class NotepadGUI extends JFrame {
 
         // Save
         JMenuItem saveMenuItem = new JMenuItem("Save");
+        saveMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // If the current file is null, I have to perferm save as functionality
+                if (currentFile == null) saveAsMenuItem.doClick();
+
+                try {
+                    FileWriter fileWriter = new FileWriter(currentFile);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    bufferedWriter.write(textArea.getText());
+                    bufferedWriter.close();
+                    fileWriter.close();
+                }catch(Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
         fileMenu.add(saveMenuItem);
 
         // Exit
