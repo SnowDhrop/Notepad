@@ -126,6 +126,25 @@ public class NotepadGUI extends JFrame {
 
         // Aligning text
         JMenu alignTextMenu = new JMenu("Align Text");
+
+        JMenuItem alignTextLeftMenu = new JMenuItem("Left");
+        alignTextLeftMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textArea.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+            }
+        });
+        alignTextMenu.add(alignTextLeftMenu);
+
+        JMenuItem alignTextRightMenu = new JMenuItem("Right");
+        alignTextRightMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textArea.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+            }
+        });
+        alignTextMenu.add(alignTextRightMenu);
+
         formatMenu.add(alignTextMenu);
 
         // Font format
