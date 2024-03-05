@@ -2,6 +2,8 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FontMenu extends JDialog {
     private NotepadGUI source;
@@ -52,6 +54,28 @@ public class FontMenu extends JDialog {
 
         for(String fontName : fontNames) {
             JLabel fontNameLabel = new JLabel(fontName);
+
+            fontNameLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    currentFontField.setText(fontName);
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    // Add hightlight when the mouse over them
+                    fontNameLabel.setOpaque(true);
+                    fontNameLabel.setBackground(Color.GRAY);
+                    fontNameLabel.setForeground(Color.WHITE);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    fontNameLabel.setBackground(null);
+                    fontNameLabel.setForeground(null);
+                }
+            });
+
             listOfFontsPanel.add(fontNameLabel);
         }
 
