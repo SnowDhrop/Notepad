@@ -124,7 +124,30 @@ public class FontMenu extends JDialog {
         fontStylePanel.add(currentFontStyleField);
 
         // Display list of all font style available
-        
+        JPanel listOfFontStylesPanel = new JPanel();
+        listOfFontStylesPanel.setLayout(new BoxLayout(listOfFontStylesPanel, BoxLayout.Y_AXIS));
+        listOfFontStylesPanel.setBackground(Color.WHITE);
+
+        JLabel plainStyle = new JLabel("Plain");
+        plainStyle.setFont(new Font("Dialog", Font.PLAIN, 12));
+        listOfFontStylesPanel.add(plainStyle);
+
+        JLabel boldStyle = new JLabel("Bold");
+        boldStyle.setFont(new Font("Dialog", Font.BOLD, 12));
+        listOfFontStylesPanel.add(boldStyle);
+
+        JLabel italicStyle = new JLabel("Italic");
+        italicStyle.setFont(new Font("Dialog", Font.ITALIC, 12));
+        listOfFontStylesPanel.add(italicStyle);
+
+        JLabel boldItalicStyle = new JLabel("Bold Italic");
+        boldItalicStyle.setFont(new Font("Dialog", Font.ITALIC | Font.BOLD, 12));
+        listOfFontStylesPanel.add(boldItalicStyle);
+
+        JScrollPane scrollPane = new JScrollPane(listOfFontStylesPanel);
+        scrollPane.setPreferredSize(new Dimension(125, 125));
+
+        fontStylePanel.add(scrollPane);
 
         add(fontStylePanel);
     }
