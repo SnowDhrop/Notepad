@@ -24,6 +24,7 @@ public class FontMenu extends JDialog {
     private void addMenuComponents() {
         addFontChooser();
         addFontStyleChooser();
+        addFontSizeChooser();
     }
 
     private void addFontChooser() {
@@ -96,25 +97,12 @@ public class FontMenu extends JDialog {
 
         // Get current font style
         int currentFontStyle = source.getTextArea().getFont().getStyle();
-        String currentFontStyleText;
-
-        switch(currentFontStyle) {
-            case Font.PLAIN:
-                currentFontStyleText = "Plain";
-                break;
-
-            case Font.BOLD:
-                currentFontStyleText = "Bold";
-                break;
-
-            case Font.ITALIC:
-                currentFontStyleText = "Italique";
-                break;
-
-            default:
-                currentFontStyleText = "Bold Italic";
-                break;
-        }
+        String currentFontStyleText = switch (currentFontStyle) {
+            case Font.PLAIN -> "Plain";
+            case Font.BOLD -> "Bold";
+            case Font.ITALIC -> "Italique";
+            default -> "Bold Italic";
+        };
 
         System.out.println(currentFontStyleText);
 
@@ -130,18 +118,22 @@ public class FontMenu extends JDialog {
 
         JLabel plainStyle = new JLabel("Plain");
         plainStyle.setFont(new Font("Dialog", Font.PLAIN, 12));
+        setLogicFontStyle(plainStyle, currentFontStyleField);
         listOfFontStylesPanel.add(plainStyle);
 
         JLabel boldStyle = new JLabel("Bold");
         boldStyle.setFont(new Font("Dialog", Font.BOLD, 12));
+        setLogicFontStyle(boldStyle, currentFontStyleField);
         listOfFontStylesPanel.add(boldStyle);
 
         JLabel italicStyle = new JLabel("Italic");
         italicStyle.setFont(new Font("Dialog", Font.ITALIC, 12));
+        setLogicFontStyle(italicStyle, currentFontStyleField);
         listOfFontStylesPanel.add(italicStyle);
 
         JLabel boldItalicStyle = new JLabel("Bold Italic");
         boldItalicStyle.setFont(new Font("Dialog", Font.ITALIC | Font.BOLD, 12));
+        setLogicFontStyle(boldItalicStyle, currentFontStyleField);
         listOfFontStylesPanel.add(boldItalicStyle);
 
         JScrollPane scrollPane = new JScrollPane(listOfFontStylesPanel);
@@ -150,6 +142,52 @@ public class FontMenu extends JDialog {
         fontStylePanel.add(scrollPane);
 
         add(fontStylePanel);
+    }
+
+    private void setLogicFontStyle(JLabel fontStyleName, JTextField currentFontStyleField) {
+        fontStyleName.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Update current style field
+                currentFontStyleField.setText(fontStyleName.getText());
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                fontStyleName.setOpaque(true);
+                fontStyleName.setBackground(Color.GRAY);
+                fontStyleName.setForeground(Color.WHITE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                fontStyleName.setBackground(null);
+                fontStyleName.setForeground(null);
+            }
+        });
+    }
+
+    private void addFontSizeChooser() {
+        JLabel fontSizeLabel = new JLabel("Font size:");
+        fontSizeLabel.setBounds(275, 5, 125, 10);
+        add(fontSizeLabel);
+
+        JPanel fontSizePanel = new JPanel();
+        fontSizePanel.setBounds(275, 15, 125, 160);
+
+        JTextField currentFontSizeField = new JTextField((
+                Integer.toString(source.getTextArea().getFont().getSize())
+        ));
+        currentFontSizeField.setPreferredSize(new Dimension(125, 25));
+        currentFontSizeField.setEditable(false);
+        fontSizePanel.add(currentFontSizeField);
+
+        // List of font sizes to choose from
+        
+
+        add(fontSizePanel);
+
+
     }
 }
 
