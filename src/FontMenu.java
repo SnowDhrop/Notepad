@@ -23,6 +23,7 @@ public class FontMenu extends JDialog {
 
     private void addMenuComponents() {
         addFontChooser();
+        addFontStyleChooser();
     }
 
     private void addFontChooser() {
@@ -83,6 +84,49 @@ public class FontMenu extends JDialog {
 
 
         add(fontPanel);
+    }
+
+    private void addFontStyleChooser() {
+        JLabel fontStyleLabel = new JLabel("Font style:");
+        fontStyleLabel.setBounds(145, 5, 125, 10);
+        add(fontStyleLabel);
+
+        JPanel fontStylePanel = new JPanel();
+        fontStylePanel.setBounds(145, 15, 125, 160);
+
+        // Get current font style
+        int currentFontStyle = source.getTextArea().getFont().getStyle();
+        String currentFontStyleText;
+
+        switch(currentFontStyle) {
+            case Font.PLAIN:
+                currentFontStyleText = "Plain";
+                break;
+
+            case Font.BOLD:
+                currentFontStyleText = "Bold";
+                break;
+
+            case Font.ITALIC:
+                currentFontStyleText = "Italique";
+                break;
+
+            default:
+                currentFontStyleText = "Bold Italic";
+                break;
+        }
+
+        System.out.println(currentFontStyleText);
+
+        JTextField currentFontStyleField = new JTextField(currentFontStyleText);
+        currentFontStyleField.setPreferredSize(new Dimension(125, 25));
+        currentFontStyleField.setEditable(false);
+        fontStylePanel.add(currentFontStyleField);
+
+        // Display list of all font style available
+        
+
+        add(fontStylePanel);
     }
 }
 
