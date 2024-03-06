@@ -2,6 +2,8 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -25,6 +27,7 @@ public class FontMenu extends JDialog {
         addFontChooser();
         addFontStyleChooser();
         addFontSizeChooser();
+        addFontColorChooser();
     }
 
     private void addFontChooser() {
@@ -218,6 +221,26 @@ public class FontMenu extends JDialog {
         fontSizePanel.add(scrollPane);
 
         add(fontSizePanel);
+    }
+
+    private void addFontColorChooser() {
+        // Display current color of the text
+        JPanel currentColorBox = new JPanel();
+        currentColorBox.setBounds(175, 200, 23, 23);
+        currentColorBox.setBackground(source.getTextArea().getForeground());
+        currentColorBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        add(currentColorBox);
+
+        JButton chooseColorButton = new JButton("Choose color");
+        chooseColorButton.setBounds(10, 200, 150, 25);
+        chooseColorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color c = JColorChooser.showDialog(null, "Select a color", Color.BLACK);
+                currentColorBox.setBackground(c);
+            }
+        });
+        add(chooseColorButton);
     }
 }
 
