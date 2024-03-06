@@ -183,11 +183,41 @@ public class FontMenu extends JDialog {
         fontSizePanel.add(currentFontSizeField);
 
         // List of font sizes to choose from
-        
+        JPanel listOfFontSizesPanel = new JPanel();
+        listOfFontSizesPanel.setLayout(new BoxLayout(listOfFontSizesPanel, BoxLayout.Y_AXIS));
+        listOfFontSizesPanel.setBackground(Color.WHITE);
+
+        // Availables font size will be from 8 to 72 with increments of 2
+        for(int i=0; i<73; i+=2) {
+            JLabel fontSizeValueLabel = new JLabel(Integer.toString(i));
+            fontSizeValueLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    currentFontSizeField.setText(fontSizeValueLabel.getText());
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    fontSizeValueLabel.setOpaque(true);
+                    fontSizeValueLabel.setBackground(Color.GRAY);
+                    fontSizeValueLabel.setForeground(Color.WHITE);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    fontSizeValueLabel.setOpaque(false);
+                    fontSizeValueLabel.setBackground(null);
+                    fontSizeValueLabel.setForeground(null);
+                }
+            });
+            listOfFontSizesPanel.add(fontSizeValueLabel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listOfFontSizesPanel);
+        scrollPane.setPreferredSize(new Dimension(125, 125));
+        fontSizePanel.add(scrollPane);
 
         add(fontSizePanel);
-
-
     }
 }
 
