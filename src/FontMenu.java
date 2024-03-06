@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 
 public class FontMenu extends JDialog {
     private NotepadGUI source;
+    private JTextField currentFontField, currentFontStyleField, currentFontSizeField;
+    private JPanel currentColorBox;
 
     public FontMenu(NotepadGUI source) {
         this.source = source;
@@ -28,6 +30,43 @@ public class FontMenu extends JDialog {
         addFontStyleChooser();
         addFontSizeChooser();
         addFontColorChooser();
+
+        // Action buttons
+        JButton applyButton = new JButton("Apply");
+        applyButton.setBounds(230, 265, 75, 25);
+        applyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fontType = currentFontField.getText();
+                int fontStyle = switch(currentFontStyleField.getText()) {
+                    case "Plain" -> Font.PLAIN;
+                    case "Bold" -> Font.BOLD;
+                    case "Italic" -> Font.ITALIC;
+                    default -> Font.BOLD | Font.ITALIC;
+                };
+                int fontSize = Integer.parseInt(currentFontSizeField.getText());
+                Color fontColor = currentColorBox.getBackground();
+
+                // Create font
+                Font newFont = new Font(fontType, fontStyle, fontSize);
+
+                source.getTextArea().setFont(newFont);
+                source.getTextArea().setForeground(fontColor);
+
+                FontMenu.this.dispose();
+            }
+        });
+        add(applyButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setBounds(315, 265, 75, 25);
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FontMenu.this.dispose();
+            }
+        });
+        add(cancelButton);
     }
 
     private void addFontChooser() {
@@ -39,7 +78,7 @@ public class FontMenu extends JDialog {
         JPanel fontPanel = new JPanel();
         fontPanel.setBounds(10, 15, 125, 160);
 
-        JTextField currentFontField = new JTextField(source.getTextArea().getFont().getFontName());
+        currentFontField = new JTextField(source.getTextArea().getFont().getFontName());
         currentFontField.setPreferredSize(new Dimension(125, 25));
         currentFontField.setEditable(false);
         fontPanel.add(currentFontField);
@@ -103,13 +142,13 @@ public class FontMenu extends JDialog {
         String currentFontStyleText = switch (currentFontStyle) {
             case Font.PLAIN -> "Plain";
             case Font.BOLD -> "Bold";
-            case Font.ITALIC -> "Italique";
+            case Font.ITALIC -> "Italic";
             default -> "Bold Italic";
         };
 
         System.out.println(currentFontStyleText);
 
-        JTextField currentFontStyleField = new JTextField(currentFontStyleText);
+        currentFontStyleField = new JTextField(currentFontStyleText);
         currentFontStyleField.setPreferredSize(new Dimension(125, 25));
         currentFontStyleField.setEditable(false);
         fontStylePanel.add(currentFontStyleField);
@@ -178,7 +217,7 @@ public class FontMenu extends JDialog {
         JPanel fontSizePanel = new JPanel();
         fontSizePanel.setBounds(275, 15, 125, 160);
 
-        JTextField currentFontSizeField = new JTextField((
+        currentFontSizeField = new JTextField((
                 Integer.toString(source.getTextArea().getFont().getSize())
         ));
         currentFontSizeField.setPreferredSize(new Dimension(125, 25));
@@ -191,7 +230,7 @@ public class FontMenu extends JDialog {
         listOfFontSizesPanel.setBackground(Color.WHITE);
 
         // Availables font size will be from 8 to 72 with increments of 2
-        for(int i=0; i<73; i+=2) {
+        for(int i=8; i<73; i+=2) {
             JLabel fontSizeValueLabel = new JLabel(Integer.toString(i));
             fontSizeValueLabel.addMouseListener(new MouseAdapter() {
                 @Override
@@ -225,7 +264,7 @@ public class FontMenu extends JDialog {
 
     private void addFontColorChooser() {
         // Display current color of the text
-        JPanel currentColorBox = new JPanel();
+        currentColorBox = new JPanel();
         currentColorBox.setBounds(175, 200, 23, 23);
         currentColorBox.setBackground(source.getTextArea().getForeground());
         currentColorBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
